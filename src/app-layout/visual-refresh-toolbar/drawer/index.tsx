@@ -1,6 +1,6 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
-import React, { useRef } from 'react';
+import React, { useMemo, useRef } from 'react';
 import clsx from 'clsx';
 
 import { InternalButton } from '../../../button/internal';
@@ -35,6 +35,8 @@ export function AppLayoutDrawerImplementation({ appLayoutInternals }: AppLayoutD
   const drawerRef = useRef<HTMLDivElement>(null);
   const activeDrawerId = activeDrawer?.id;
 
+  const activeDrawerIdRef = useRef<Record<string, boolean>>({});
+
   const computedAriaLabels = {
     closeButton: activeDrawer ? activeDrawer.ariaLabels?.closeButton : ariaLabels?.toolsClose,
     content: activeDrawer ? activeDrawer.ariaLabels?.drawerName : ariaLabels?.tools,
@@ -51,6 +53,19 @@ export function AppLayoutDrawerImplementation({ appLayoutInternals }: AppLayoutD
     handleRef: drawersFocusControl.refs.slider,
     onResize: size => onActiveDrawerResize({ id: activeDrawerId!, size }),
   });
+
+  if (activeDrawerId) {
+    activeDrawerIdRef.current[activeDrawerId] = true;
+  }
+
+  const filteredDrawers = useMemo(
+    () =>
+      drawers?.filter(
+        ({ id: drawerId }) =>
+          drawerId !== TOOLS_DRAWER_ID && (activeDrawerIdRef?.current[drawerId] || activeDrawerId === drawerId)
+      ),
+    [drawers, activeDrawerId]
+  );
 
   return (
     <aside
@@ -110,7 +125,14 @@ export function AppLayoutDrawerImplementation({ appLayoutInternals }: AppLayoutD
             {toolsContent}
           </div>
         )}
-        {activeDrawerId !== TOOLS_DRAWER_ID && <div className={styles['drawer-content']}>{activeDrawer?.content}</div>}
+        {filteredDrawers?.map(drawer => (
+          <div
+            className={clsx(styles['drawer-content'], activeDrawerId !== drawer.id && styles['drawer-content-hidden'])}
+            key={drawer.id}
+          >
+            {drawer?.content}
+          </div>
+        ))}
       </div>
     </aside>
   );

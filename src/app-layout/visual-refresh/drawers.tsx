@@ -1,6 +1,6 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
-import React, { useRef } from 'react';
+import React, { useMemo, useRef } from 'react';
 import clsx from 'clsx';
 
 import { useContainerQuery } from '@cloudscape-design/component-toolkit';
@@ -78,6 +78,8 @@ function ActiveDrawer() {
     drawerRef,
   } = useAppLayoutInternals();
 
+  const activeDrawerIdRef = useRef<Record<string, boolean>>({});
+
   const activeDrawer = drawers?.find(item => item.id === activeDrawerId) ?? null;
 
   const computedAriaLabels = {
@@ -91,6 +93,19 @@ function ActiveDrawer() {
   const toolsContent = drawers?.find(drawer => drawer.id === TOOLS_DRAWER_ID)?.content;
 
   const size = getLimitedValue(drawersMinWidth, drawerSize, drawersMaxWidth);
+
+  if (activeDrawerId) {
+    activeDrawerIdRef.current[activeDrawerId] = true;
+  }
+
+  const filteredDrawers = useMemo(
+    () =>
+      drawers?.filter(
+        ({ id: drawerId }) =>
+          drawerId !== TOOLS_DRAWER_ID && (activeDrawerIdRef?.current[drawerId] || activeDrawerId === drawerId)
+      ),
+    [drawers, activeDrawerId]
+  );
 
   return (
     <aside
@@ -142,9 +157,14 @@ function ActiveDrawer() {
             {toolsContent}
           </div>
         )}
-        {activeDrawerId !== TOOLS_DRAWER_ID && (
-          <div className={styles['drawer-content']}>{activeDrawerId && activeDrawer?.content}</div>
-        )}
+        {filteredDrawers?.map(drawer => (
+          <div
+            className={clsx(styles['drawer-content'], activeDrawerId !== drawer.id && styles['drawer-content-hidden'])}
+            key={drawer.id}
+          >
+            {drawer?.content}
+          </div>
+        ))}
       </div>
     </aside>
   );
