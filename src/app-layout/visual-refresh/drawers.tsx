@@ -94,7 +94,7 @@ function ActiveDrawer() {
 
   const size = getLimitedValue(drawersMinWidth, drawerSize, drawersMaxWidth);
 
-  if (activeDrawerId) {
+  if (activeDrawerId && activeDrawer?.defaultHidden) {
     activeDrawerIdRef.current[activeDrawerId] = true;
   }
 

@@ -26,6 +26,7 @@ export interface AppLayoutProps extends BaseComponentProps {
    * * resizable (boolean) - if the drawer is resizable or not.
    * * defaultSize (number) - starting size of the drawer. if not set, defaults to 290.
    * * onResize (({ size: number }) => void) - Fired when the active drawer is resized.
+   * * defaultHidden (boolean) - the drawer hidden on collapse doesn't unmount, default is false.
    *
    * #### DrawerTrigger
    * - `iconName` (IconProps.Name) - (Optional) Specifies the icon to be displayed.
@@ -292,6 +293,7 @@ export namespace AppLayoutProps {
     resizable?: boolean;
     defaultSize?: number;
     onResize?: NonCancelableEventHandler<{ size: number }>;
+    defaultHidden?: boolean;
   }
 
   export interface DrawerAriaLabels {

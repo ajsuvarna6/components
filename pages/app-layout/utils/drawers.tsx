@@ -48,6 +48,7 @@ export const drawerItems: Array<AppLayoutProps.Drawer> = [
     content: <Drawer header={<h2>Pro help</h2>}>Pro help.</Drawer>,
     badge: true,
     defaultSize: 600,
+    defaultHidden: true,
     id: 'pro-help',
     trigger: {
       iconName: 'contact',
@@ -59,6 +60,7 @@ export const drawerItems: Array<AppLayoutProps.Drawer> = [
     defaultSize: 500,
     content: <Drawer header={<h2>Links</h2>}>Links.</Drawer>,
     id: 'links',
+    defaultHidden: true,
     trigger: {
       iconName: 'share',
     },

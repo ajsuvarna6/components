@@ -19,9 +19,11 @@ export function convertRuntimeDrawers(drawers: Array<RuntimeDrawerConfig>): Draw
       mountContent,
       unmountContent,
       trigger,
+      defaultHidden,
       ...runtimeDrawer
     }): AppLayoutProps.Drawer & { orderPriority?: number } => ({
       ...runtimeDrawer,
+      defaultHidden: defaultHidden ?? false,
       ariaLabels: { drawerName: runtimeDrawer.ariaLabels.content ?? '', ...runtimeDrawer.ariaLabels },
       trigger: {
         iconSvg: (

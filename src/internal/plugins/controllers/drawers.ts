@@ -20,6 +20,7 @@ export interface DrawerConfig {
   trigger: {
     iconSvg: string;
   };
+  defaultHidden?: boolean;
   mountContent: (container: HTMLElement) => void;
   unmountContent: (container: HTMLElement) => void;
 }

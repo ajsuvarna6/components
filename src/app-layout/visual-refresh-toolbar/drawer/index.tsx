@@ -54,7 +54,7 @@ export function AppLayoutDrawerImplementation({ appLayoutInternals }: AppLayoutD
     onResize: size => onActiveDrawerResize({ id: activeDrawerId!, size }),
   });
 
-  if (activeDrawerId) {
+  if (activeDrawerId && activeDrawer?.defaultHidden) {
     activeDrawerIdRef.current[activeDrawerId] = true;
   }
 
